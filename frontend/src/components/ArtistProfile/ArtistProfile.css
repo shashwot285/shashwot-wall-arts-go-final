@@ -1,0 +1,390 @@
+.artist-profile-container {
+  min-height: 100vh;
+  background: #fafbfc;
+  padding: 24px;
+  padding-top: 100px;
+}
+
+.back-btn {
+  max-width: 1200px;
+  margin: 0 auto 20px;
+  display: block;
+  background: none;
+  border: none;
+  color: #1a1a1a;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 8px 0;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.back-btn:hover {
+  opacity: 0.6;
+}
+
+.artist-header {
+  max-width: 1200px;
+  margin: 0 auto 32px;
+  background: white;
+  padding: 48px;
+  border-radius: 12px;
+  border: 1px solid #e8e8e8;
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+}
+
+.artist-avatar {
+  width: 120px;
+  height: 120px;
+  background: #1a1a1a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  color: white;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.artist-info {
+  flex: 1;
+}
+
+.artist-info h1 {
+  font-size: 32px;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.artist-bio {
+  color: #4a4a4a;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.artist-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #4a4a4a;
+  font-size: 14px;
+}
+
+.contact-icon {
+  font-size: 16px;
+}
+
+.artist-stats {
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  background: white;
+  padding: 28px 20px;
+  border-radius: 12px;
+  border: 1px solid #e8e8e8;
+  text-align: left;
+  transition: border-color 0.2s;
+}
+
+.stat-card:hover {
+  border-color: #d0d0d0;
+}
+
+.stat-icon {
+  font-size: 24px;
+  margin-bottom: 16px;
+  opacity: 0.7;
+  display: block;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+  display: block;
+}
+
+.stat-label {
+  color: #6a6a6a;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  font-weight: 500;
+  display: block;
+}
+
+.artworks-collection {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.artworks-collection h2 {
+  font-size: 24px;
+  color: #1a1a1a;
+  margin-bottom: 24px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 10px 20px;
+  background: white;
+  color: #4a4a4a;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+}
+
+.filter-btn.active {
+  background: #1a1a1a;
+  color: white;
+  border-color: #1a1a1a;
+}
+
+.artworks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 32px;
+}
+
+.artwork-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid #e8e8e8;
+}
+
+.artwork-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: #d0d0d0;
+}
+
+.artwork-image {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.artwork-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.artwork-card:hover .artwork-image img {
+  transform: scale(1.03);
+}
+
+.bestseller-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #dc2626;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.2px;
+  display: inline-block;
+  width: fit-content;
+}
+
+.artwork-info {
+  padding: 20px;
+}
+
+.artwork-info h3 {
+  font-size: 16px;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.artwork-category {
+  color: #6a6a6a;
+  font-size: 13px;
+  margin-bottom: 16px;
+  text-transform: capitalize;
+}
+
+.artwork-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.artwork-price {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  letter-spacing: -0.3px;
+}
+
+.artwork-views {
+  color: #9a9a9a;
+  font-size: 13px;
+}
+
+.no-artworks {
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e8e8e8;
+  color: #9a9a9a;
+  font-size: 15px;
+}
+
+.loading-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fafbfc;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e8e8e8;
+  border-top-color: #1a1a1a;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-container p {
+  margin-top: 16px;
+  color: #6a6a6a;
+  font-size: 14px;
+}
+
+.error-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fafbfc;
+}
+
+.error-container h2 {
+  color: #000000;
+  font-size: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.error-container button {
+  padding: 12px 24px;
+  background: #1a1a1a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: opacity 0.2s;
+}
+
+.error-container button:hover {
+  opacity: 0.85;
+}
+
+@media (max-width: 968px) {
+  .artist-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 32px 24px;
+  }
+
+  .artist-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .artworks-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .artist-info h1 {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  .artist-profile-container {
+    padding: 16px;
+    padding-top: 90px;
+  }
+
+  .artist-stats {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .stat-card {
+    padding: 20px;
+  }
+
+  .filter-buttons {
+    gap: 8px;
+  }
+
+  .filter-btn {
+    font-size: 13px;
+    padding: 8px 16px;
+  }
+}

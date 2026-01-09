@@ -1,0 +1,354 @@
+/* ===== ADJUST FOR NAVBAR ===== */
+.home-container {
+  min-height: 100vh;
+  background: #fdfdfd; /* Clean, professional off-white */
+  padding: 20px;
+  padding-top: 70px; /* Start right below navbar */
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ===== GLOBAL STYLES ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== HEADER ===== */
+.header {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+              url('https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=1600') center/cover;
+  height: 45vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white !important;
+  margin-bottom: 0;
+  padding: 20px;
+  border-radius: 0;
+}
+
+.header h1 {
+  color: white !important;
+  font-size: 3.5rem !important;
+  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.9);
+  letter-spacing: 3px;
+  font-weight: 900;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.header p {
+  color: white !important;
+  font-size: 1.1rem !important;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9);
+  font-weight: 500 !important;
+  letter-spacing: 1px;
+}
+
+/* ===== TOP BAR WITH SORT OPTIONS ===== */
+.top-bar {
+  max-width: 1300px;
+  margin: 20px auto 40px auto;
+  background: #ffffff;
+  padding: 15px 30px;
+  padding-left: 50px; /* Align with artwork content (slider has 40px + 10px) */
+  padding-right: 100px; /* Extended white space on right side */
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eeeeee;
+  position: sticky;
+  top: 70px; /* Stick below navbar (navbar height = 70px) */
+  z-index: 999; /* Below navbar (navbar z-index = 1000) */
+}
+
+.sort-options {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.sort-label {
+  font-weight: 700;
+  color: #000000;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.sort-btn {
+  padding: 8px 18px;
+  border: 1px solid #000000;
+  background: white;
+  color: #000000;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.sort-btn:hover {
+  background: #000000;
+  color: white;
+}
+
+.sort-btn.active {
+  background: #000000;
+  color: white;
+}
+
+/* ===== DROPDOWN ===== */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: white;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  min-width: 180px;
+  overflow: hidden;
+}
+
+.dropdown-content button {
+  display: block;
+  width: 100%;
+  padding: 12px 15px;
+  border: none;
+  background: white;
+  color: #000000;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.dropdown-content button:hover {
+  background: #f5f5f5;
+}
+
+/* ===== ARTIST SECTION ===== */
+.artists-container {
+  max-width: 1250px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.artist-section {
+  background: transparent; /* Minimalist look */
+  padding: 10px;
+}
+
+/* Artist Header */
+.artist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #000000;
+}
+
+.artist-info h2 {
+  font-size: 1.8rem;
+  color: #000000;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.artist-bio {
+  color: #000000;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.view-profile-btn {
+  padding: 8px 20px;
+  background: #000000;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: opacity 0.3s ease;
+}
+
+.view-profile-btn:hover {
+  opacity: 0.8;
+}
+
+/* ===== ARTWORK SLIDER ===== */
+.slider-container {
+  position: relative;
+  padding: 0 40px;
+}
+
+.slider-arrow {
+  position: absolute;
+  top: 40%;
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.slider-arrow:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+.slider-arrow.left { left: -10px; }
+.slider-arrow.right { right: -10px; }
+
+.artworks-slider {
+  display: flex;
+  gap: 25px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 20px 0;
+  scrollbar-width: none; /* Hide scrollbar for cleaner look */
+}
+
+.artworks-slider::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== ARTWORK CARD ===== */
+.artwork-card {
+  min-width: 320px;
+  background: #ffffff;
+  border-radius: 0px; /* Modern sharp edges */
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.artwork-card:hover {
+  transform: translateY(-5px);
+}
+
+.artwork-image-container {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  background: #f0f0f0;
+}
+
+.artwork-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bestseller-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #000000;
+  color: #ffffff;
+  padding: 5px 12px;
+  font-weight: 700;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.artwork-info {
+  padding: 15px 0;
+}
+
+.artwork-info h3 {
+  font-size: 1.1rem;
+  color: #000000;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.artwork-size {
+  color: #000000;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+
+.artwork-price {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #000000;
+  margin-bottom: 12px;
+}
+
+.view-details-btn {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 0px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.view-details-btn:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+/* ===== LOADING ===== */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top-color: #000000;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .header h1 { font-size: 2.2rem !important; }
+  .header { height: 25vh; }
+  .artist-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+  .artwork-card { min-width: 260px; }
+  .slider-container { padding: 0 10px; }
+  .slider-arrow { display: none; } /* Use touch scroll on mobile */
+  .artworks-slider { scrollbar-width: auto; }
+}

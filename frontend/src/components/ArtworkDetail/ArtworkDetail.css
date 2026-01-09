@@ -1,0 +1,264 @@
+.artwork-detail-container {
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding: 20px;
+}
+
+.back-btn {
+  max-width: 1200px;
+  margin: 0 auto 20px;
+  padding: 10px 20px;
+  background: #fff;
+  border: 2px solid #3498db;
+  color: #3498db;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-btn:hover {
+  background: #3498db;
+  color: white;
+  transform: translateX(-5px);
+}
+
+.artwork-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 45% 55%;
+  gap: 40px;
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.artwork-image-section {
+  position: sticky; /* Keeps image visible while scrolling info */
+  top: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.artwork-main-image {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.bestseller-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #000000; /* Professional Dark Navy */
+  color: white;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.artwork-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* REMOVED max-height and overflow-y to eliminate inside scroll */
+}
+
+.artwork-title {
+  font-size: 2.5em;
+  color: #000000;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.artist-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  width: fit-content;
+  padding: 8px 0;
+}
+
+.artist-label {
+  color: #666;
+  font-size: 1em;
+}
+
+.artist-name-link {
+  color: #3498db;
+  font-size: 1.2em;
+  font-weight: 600;
+  text-decoration: underline;
+  transition: color 0.3s;
+}
+
+.price-section {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.price-label {
+  font-size: 1.1em;
+  color: #666;
+}
+
+.price-amount {
+  font-size: 1.8em;
+  color: #000000; /* REMOVED RED - Changed to Professional Dark */
+  font-weight: bold;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.info-label {
+  color: #666;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+.info-value {
+  color: #2c3e50;
+  font-size: 1.05em;
+}
+
+.description-section {
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.description-section h3 {
+  color: #000408;
+  margin-bottom: 12px;
+  font-size: 1.3em;
+}
+
+.description-section p {
+  color: #555;
+  line-height: 1.6;
+  font-size: 1em;
+}
+
+.artist-contact-section {
+  padding: 15px;
+  background: #e8f4f8;
+  border-radius: 10px;
+  border-left: 4px solid #3498db;
+}
+
+.book-now-btn {
+  padding: 16px 35px;
+  background: #000000; /* Professional Dark Grey/Black */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: 600;
+  transition: all 0.3s;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  margin-top: 10px;
+}
+
+.book-now-btn:hover {
+  background: #1a252f;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+/* Modal Styles - REVERTED TO ORIGINAL */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 35px;
+  border-radius: 15px;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px; right: 15px;
+  background: none; border: none;
+  font-size: 2em; cursor: pointer;
+  color: #999;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.cancel-btn, .submit-btn {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.cancel-btn {
+  background: #f8f9fa;
+  color: #666;
+  border: 2px solid #e0e0e0;
+}
+
+.submit-btn {
+  background: #3498db;
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+  .artwork-content {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+  .artwork-image-section {
+    position: static;
+  }
+}
