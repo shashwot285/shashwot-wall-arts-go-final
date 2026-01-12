@@ -13,50 +13,38 @@ function AdminBookings() {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [updatingStatus, setUpdatingStatus] = useState(null);
 
+  // ⭐ NEW STATE: Filtering & Sorting
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [sortOrder, setSortOrder] = useState('newest');
+
+  // ⭐ NEW STATE: Confirmation Modal
+  const [confirmationData, setConfirmationData] = useState(null);
+
   const fetchBookings = useCallback(async () => {
     try {
-      console.log('==========================================');
-      console.log('👑 FETCHING ALL BOOKINGS (ADMIN)');
-      
       const user = JSON.parse(localStorage.getItem('user'));
-      console.log('👤 Current user:', user);
-
       if (!user || !user.token) {
-        console.log('❌ No user or token found');
         navigate('/login');
         return;
       }
 
       if (user.role !== 'admin') {
-        console.log('❌ User is not admin, redirecting...');
         navigate('/my-bookings');
         return;
       }
 
       const response = await bookingAPI.getAllBookings();
       
-      console.log('📦 RAW RESPONSE:', response);
-      console.log('📦 RESPONSE.DATA:', response.data);
-      
       if (response.data && response.data.success) {
         const bookingsData = response.data.bookings || response.data.data || [];
-        console.log('✅ BOOKINGS DATA:', bookingsData);
-        console.log('✅ BOOKINGS LENGTH:', bookingsData.length);
-        console.log('✅ IS ARRAY?', Array.isArray(bookingsData));
-        
         setBookings(bookingsData);
         setLoading(false);
-        
-        console.log('✅ STATE UPDATED - Bookings count:', bookingsData.length);
       } else {
-        console.log('❌ Response success was false');
         setError('Failed to load bookings');
         setLoading(false);
       }
     } catch (error) {
-      console.error('❌ ERROR FETCHING BOOKINGS:', error);
-      console.error('❌ ERROR RESPONSE:', error.response);
-      
+      console.error('Error fetching bookings:', error);
       if (error.response?.status === 401) {
         localStorage.removeItem('user');
         navigate('/login');
@@ -65,7 +53,6 @@ function AdminBookings() {
       } else {
         setError(error.message || 'Failed to load bookings');
       }
-      
       setLoading(false);
     }
   }, [navigate]);
@@ -74,7 +61,23 @@ function AdminBookings() {
     fetchBookings();
   }, [fetchBookings]);
 
-  const handleStatusChange = async (bookingId, newStatus) => {
+  // ⭐ MODIFIED: Open Confirmation Modal instead of immediate update
+  const handleStatusChangeRequest = (bookingId, newStatus) => {
+    setConfirmationData({
+      bookingId,
+      newStatus
+    });
+  };
+
+  // ⭐ NEW: Actually perform the update after confirmation
+  const confirmStatusUpdate = async () => {
+    if (!confirmationData) return;
+
+    const { bookingId, newStatus } = confirmationData;
+    
+    // Close modal immediately
+    setConfirmationData(null);
+
     try {
       setUpdatingStatus(bookingId);
       console.log('🔄 Updating status for booking:', bookingId, 'to:', newStatus);
@@ -125,15 +128,29 @@ function AdminBookings() {
   };
 
   const handleBookingClick = (booking) => {
-    console.log('🔘 Booking clicked:', booking.booking_id);
     setSelectedBooking(selectedBooking?.booking_id === booking.booking_id ? null : booking);
   };
 
-  console.log('🎨 RENDERING AdminBookings Component');
-  console.log('🎨 Current bookings state:', bookings);
-  console.log('🎨 Bookings length:', bookings.length);
-  console.log('🎨 Loading:', loading);
-  console.log('🎨 Error:', error);
+  // ⭐ NEW: Filter and Sort Logic
+  const getFilteredAndSortedBookings = () => {
+    let result = [...bookings];
+
+    // 1. Filter
+    if (filterStatus !== 'all') {
+      result = result.filter(b => b.status === filterStatus);
+    }
+
+    // 2. Sort
+    result.sort((a, b) => {
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
+      return sortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+    });
+
+    return result;
+  };
+
+  const filteredBookings = getFilteredAndSortedBookings();
 
   if (loading) {
     return (
@@ -154,9 +171,6 @@ function AdminBookings() {
     );
   }
 
-  const hasBookings = Array.isArray(bookings) && bookings.length > 0;
-  console.log('🎨 hasBookings:', hasBookings);
-
   return (
     <div className="admin-bookings-page">
       <div className="page-header">
@@ -167,21 +181,70 @@ function AdminBookings() {
         <p className="subtitle">Manage all customer bookings</p>
       </div>
 
-      {!hasBookings ? (
+      {/* ⭐ NEW: Filters and Sort Controls */}
+      <div className="filters-container">
+        <div className="filter-tabs">
+          <button 
+            className={`filter-tab ${filterStatus === 'all' ? 'active' : ''}`}
+            onClick={() => setFilterStatus('all')}
+          >
+            All
+          </button>
+          <button 
+            className={`filter-tab ${filterStatus === 'pending' ? 'active' : ''}`}
+            onClick={() => setFilterStatus('pending')}
+          >
+            Pending
+          </button>
+          <button 
+            className={`filter-tab ${filterStatus === 'confirmed' ? 'active' : ''}`}
+            onClick={() => setFilterStatus('confirmed')}
+          >
+            Confirmed
+          </button>
+          <button 
+            className={`filter-tab ${filterStatus === 'completed' ? 'active' : ''}`}
+            onClick={() => setFilterStatus('completed')}
+          >
+            Completed
+          </button>
+          <button 
+            className={`filter-tab ${filterStatus === 'cancelled' ? 'active' : ''}`}
+            onClick={() => setFilterStatus('cancelled')}
+          >
+            Cancelled
+          </button>
+        </div>
+
+        <div className="sort-controls">
+          <select 
+            value={sortOrder} 
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+        </div>
+      </div>
+
+      {filteredBookings.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">📋</div>
-          <h2>No Bookings Yet</h2>
-          <p>No bookings have been made yet.</p>
+          <h2>No Bookings Found</h2>
+          <p>
+            {filterStatus === 'all' 
+              ? "No bookings have been made yet." 
+              : `No ${filterStatus} bookings found.`}
+          </p>
         </div>
       ) : (
         <div className="bookings-container">
           <div className="bookings-count">
-            {bookings.length} {bookings.length === 1 ? 'Booking' : 'Bookings'}
+            {filteredBookings.length} {filteredBookings.length === 1 ? 'Booking' : 'Bookings'}
           </div>
           
           <div className="bookings-list">
-            {bookings.map((booking, index) => {
-              console.log(`🎨 Rendering booking ${index + 1}:`, booking);
+            {filteredBookings.map((booking) => {
               return (
                 <div 
                   key={booking.booking_id} 
@@ -222,7 +285,7 @@ function AdminBookings() {
 
                   {selectedBooking?.booking_id === booking.booking_id && (
                     <div className="booking-details">
-                      {/* ⭐ CLOSE BUTTON */}
+                      {/* Close Button */}
                       <button 
                         className="close-details-btn"
                         onClick={(e) => {
@@ -240,7 +303,8 @@ function AdminBookings() {
                         <select
                           className="status-dropdown"
                           value={booking.status}
-                          onChange={(e) => handleStatusChange(booking.booking_id, e.target.value)}
+                          // ⭐ UPDATED: Call handleStatusChangeRequest instead of direct update
+                          onChange={(e) => handleStatusChangeRequest(booking.booking_id, e.target.value)}
                           disabled={updatingStatus === booking.booking_id}
                           onClick={(e) => e.stopPropagation()}
                         >
@@ -312,6 +376,26 @@ function AdminBookings() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      )}
+
+      {/* ⭐ NEW: Confirmation Modal */}
+      {confirmationData && (
+        <div className="confirmation-modal-overlay">
+          <div className="confirmation-modal">
+            <h3>Are you sure?</h3>
+            <p>
+              Do you want to change the status of this booking to <strong>{confirmationData.newStatus.toUpperCase()}</strong>?
+            </p>
+            <div className="modal-actions">
+              <button className="modal-btn cancel" onClick={() => setConfirmationData(null)}>
+                Cancel
+              </button>
+              <button className="modal-btn confirm" onClick={confirmStatusUpdate}>
+                Yes, Change it
+              </button>
+            </div>
           </div>
         </div>
       )}

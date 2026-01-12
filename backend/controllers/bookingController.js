@@ -162,7 +162,8 @@ exports.getAllBookings = async (req, res) => {
     });
   }
 };
-// ⭐ NEW FUNCTION - UPDATE BOOKING STATUS (ADMIN ONLY)
+
+// UPDATE BOOKING STATUS (ADMIN ONLY)
 exports.updateBookingStatus = async (req, res) => {
   try {
     console.log('==========================================');
@@ -208,6 +209,54 @@ exports.updateBookingStatus = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error updating booking status',
+      error: error.message
+    });
+  }
+};
+
+// ⭐ NEW: CANCEL OWN BOOKING (USER)
+exports.cancelOwnBooking = async (req, res) => {
+  try {
+    console.log('==========================================');
+    console.log('🚫 CANCEL OWN BOOKING CALLED');
+    console.log('👤 User ID:', req.user.userId);
+    console.log('📝 Booking ID:', req.params.id);
+    
+    const bookingId = parseInt(req.params.id);
+    
+    // Get booking to verify ownership and status
+    const bookings = await Booking.getByUser(req.user.userId);
+    const booking = bookings.find(b => b.booking_id === bookingId);
+    
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: 'Booking not found or you do not have permission to cancel it'
+      });
+    }
+    
+    // Only allow cancelling pending bookings
+    if (booking.status !== 'pending') {
+      return res.status(400).json({
+        success: false,
+        message: `Cannot cancel booking with status: ${booking.status}. Only pending bookings can be cancelled.`
+      });
+    }
+    
+    const updatedBooking = await Booking.updateStatus(bookingId, 'cancelled');
+    
+    console.log('✅ Booking cancelled successfully by user');
+    
+    res.status(200).json({
+      success: true,
+      message: 'Booking cancelled successfully',
+      data: updatedBooking
+    });
+  } catch (error) {
+    console.error('❌ Error cancelling booking:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error cancelling booking',
       error: error.message
     });
   }

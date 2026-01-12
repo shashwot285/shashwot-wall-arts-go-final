@@ -31,9 +31,8 @@ function Home() {
       
       const artworksMap = {};
       artistsData.forEach((artist, index) => {
-        artworksMap[artist.artist_id] = artworksResponses[index].data.data.filter(
-          art => art.artwork_id !== 20
-        );
+        // ✅ REMOVED THE FILTER - Show ALL artworks now!
+        artworksMap[artist.artist_id] = artworksResponses[index].data.data;
       });
       
       setArtworksByArtist(artworksMap);
@@ -54,8 +53,9 @@ function Home() {
       
       const artworksMap = {};
       artists.forEach(artist => {
+        // ✅ REMOVED THE FILTER - Show ALL artworks now!
         artworksMap[artist.artist_id] = sortedArtworks.filter(
-          art => art.artist_id === artist.artist_id && art.artwork_id !== 20
+          art => art.artist_id === artist.artist_id
         );
       });
       

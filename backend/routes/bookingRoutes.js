@@ -10,7 +10,8 @@ router.use(authenticateToken);
 router.get('/all-bookings', bookingController.getAllBookings);
 router.get('/my-bookings', bookingController.getUserBookings);
 router.post('/', bookingController.createBooking);
-router.patch('/:id/status', bookingController.updateBookingStatus); // ⭐ ADD THIS LINE
+router.patch('/:id/status', bookingController.updateBookingStatus); // Admin only
+router.patch('/:id/cancel', bookingController.cancelOwnBooking); // ⭐ NEW: User cancel
 router.get('/:id', bookingController.getBookingById);
 
 module.exports = router;

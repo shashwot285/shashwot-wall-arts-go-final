@@ -54,13 +54,19 @@ export const artworkAPI = {
   },
   getArtworkById: (id) => api.get(`/artworks/${id}`),
   getArtworksByArtist: (artistId) => api.get(`/artworks/artist/${artistId}`),
-  searchArtworks: (searchTerm) => api.get('/artworks/search', { params: { q: searchTerm } })
+  searchArtworks: (searchTerm) => api.get('/artworks/search', { params: { q: searchTerm } }),
+  createArtwork: (data) => api.post('/artworks', data),
+  updateArtwork: (id, data) => api.patch(`/artworks/${id}`, data),
+  deleteArtwork: (id) => api.delete(`/artworks/${id}`)
 };
 
 // Artist APIs
 export const artistAPI = {
   getAllArtists: () => api.get('/artists'),
-  getArtistById: (id) => api.get(`/artists/${id}`)
+  getArtistById: (id) => api.get(`/artists/${id}`),
+  createArtist: (data) => api.post('/artists', data),
+  updateArtist: (id, data) => api.patch(`/artists/${id}`, data),
+  deleteArtist: (id) => api.delete(`/artists/${id}`)
 };
 
 // Auth APIs
@@ -74,7 +80,8 @@ export const bookingAPI = {
   createBooking: (data) => api.post('/bookings', data),
   getUserBookings: () => api.get('/bookings/my-bookings'),
   getAllBookings: () => api.get('/bookings/all-bookings'), 
-    updateBookingStatus: (id, status) => api.patch(`/bookings/${id}/status`, { status }),
+  updateBookingStatus: (id, status) => api.patch(`/bookings/${id}/status`, { status }),
+  cancelBooking: (id) => api.patch(`/bookings/${id}/cancel`), // ⭐ NEW: User cancel
   getBookingById: (id) => api.get(`/bookings/${id}`)
 };
 

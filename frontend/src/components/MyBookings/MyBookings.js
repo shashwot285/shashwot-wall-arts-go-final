@@ -11,6 +11,36 @@ function MyBookings() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedBooking, setSelectedBooking] = useState(null);
+  
+  // ⭐ NEW: Notification and confirmation states
+  const [notification, setNotification] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState({
+    show: false,
+    message: '',
+    onConfirm: null
+  });
+
+  // ⭐ NEW: Notification helper
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
+
+  // ⭐ NEW: Confirmation helper
+  const showConfirm = (message, onConfirm) => {
+    setConfirmDialog({ show: true, message, onConfirm });
+  };
+
+  const handleConfirm = () => {
+    if (confirmDialog.onConfirm) {
+      confirmDialog.onConfirm();
+    }
+    setConfirmDialog({ show: false, message: '', onConfirm: null });
+  };
+
+  const handleCancel = () => {
+    setConfirmDialog({ show: false, message: '', onConfirm: null });
+  };
 
   const fetchBookings = useCallback(async () => {
     try {
@@ -32,7 +62,6 @@ function MyBookings() {
       console.log('📦 RESPONSE.DATA:', response.data);
       
       if (response.data && response.data.success) {
-        // ⭐ FIXED: Check both "bookings" and "data" fields
         const bookingsData = response.data.bookings || response.data.data || [];
         console.log('✅ BOOKINGS DATA:', bookingsData);
         console.log('✅ BOOKINGS LENGTH:', bookingsData.length);
@@ -65,6 +94,25 @@ function MyBookings() {
   useEffect(() => {
     fetchBookings();
   }, [fetchBookings]);
+
+  // ⭐ NEW: Cancel booking function
+  const handleCancelBooking = (bookingId) => {
+    showConfirm(
+      'Are you sure you want to cancel this booking?',
+      async () => {
+        try {
+          console.log('🚫 Cancelling booking:', bookingId);
+          await bookingAPI.cancelBooking(bookingId);
+          
+          showNotification('Booking cancelled successfully!', 'success');
+          await fetchBookings(); // Refresh bookings
+        } catch (error) {
+          console.error('❌ Error cancelling booking:', error);
+          showNotification(error.response?.data?.message || 'Failed to cancel booking', 'error');
+        }
+      }
+    );
+  };
 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
@@ -125,6 +173,31 @@ function MyBookings() {
 
   return (
     <div className="my-bookings-page">
+      {/* ⭐ NEW: Notification Toast */}
+      {notification && (
+        <div className={`popup-notification ${notification.type}`}>
+          {notification.message}
+        </div>
+      )}
+
+      {/* ⭐ NEW: Confirmation Dialog */}
+      {confirmDialog.show && (
+        <div className="modal-overlay">
+          <div className="confirm-dialog">
+            <h3>Confirm Cancellation</h3>
+            <p>{confirmDialog.message}</p>
+            <div className="dialog-actions">
+              <button onClick={handleCancel} className="cancel-btn">
+                No, Keep It
+              </button>
+              <button onClick={handleConfirm} className="confirm-btn">
+                Yes, Cancel Booking
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="page-header">
         <button onClick={() => navigate('/')} className="back-button">
           ← Back to Home
@@ -191,7 +264,6 @@ function MyBookings() {
 
                   {selectedBooking?.booking_id === booking.booking_id && (
                     <div className="booking-details">
-                      {/* ⭐ CLOSE BUTTON */}
                       <button 
                         className="close-details-btn"
                         onClick={(e) => {
@@ -243,6 +315,21 @@ function MyBookings() {
                           <div className="detail-item full-width">
                             <span className="detail-label">Special Instructions</span>
                             <span className="detail-value">{booking.special_instructions}</span>
+                          </div>
+                        )}
+
+                        {/* ⭐ NEW: Cancel Button (only for pending bookings) */}
+                        {booking.status?.toLowerCase() === 'pending' && (
+                          <div className="detail-item full-width">
+                            <button 
+                              className="cancel-booking-btn"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCancelBooking(booking.booking_id);
+                              }}
+                            >
+                              🚫 Cancel Booking
+                            </button>
                           </div>
                         )}
                       </div>

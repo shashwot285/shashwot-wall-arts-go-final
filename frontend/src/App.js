@@ -12,6 +12,7 @@ import Signup from './components/Auth/Signup';
 import Booking from './components/Booking/Booking';
 import MyBookings from './components/MyBookings/MyBookings';
 import AdminBookings from './components/AdminBookings/AdminBookings';
+import ManageContent from './components/ManageContent/ManageContent';
 import ScrollToTop from './components/shared/ScrollToTop';
 import SplashScreen from './components/SplashScreen/SplashScreen';
 import Footer from './components/Footer/Footer';
@@ -28,34 +29,15 @@ function App() {
     const checkAuth = () => {
       console.log('🔍 Checking authentication status...');
       
-      // ❌ REMOVED THIS LINE - It was clearing localStorage on every page load!
-      // localStorage.removeItem('user');
+      // ⭐ ADDED: Clear localStorage on app open - NO AUTO-LOGIN
+      localStorage.removeItem('user');
+      console.log('🧹 Cleared any existing session - manual login required');
       
-      const loggedInUser = localStorage.getItem('user');
-      
-      if (loggedInUser) {
-        try {
-          const userData = JSON.parse(loggedInUser);
-          
-          console.log('👤 Found user in localStorage:', userData);
-          
-          if (userData.user_id && userData.token) {
-            setUser(userData);
-            setIsAuthenticated(true);
-            console.log('✅ User authenticated:', userData.email || userData.username);
-          } else {
-            console.warn('⚠️ Invalid user data in localStorage, clearing...');
-            localStorage.removeItem('user');
-          }
-        } catch (error) {
-          console.error('❌ Error parsing user data:', error);
-          localStorage.removeItem('user');
-        }
-      } else {
-        console.log('ℹ️ No user found in localStorage');
-      }
-      
+      setUser(null);
+      setIsAuthenticated(false);
       setLoadingUser(false);
+      
+      console.log('ℹ️ No user found in localStorage');
     };
     
     checkAuth();
@@ -63,6 +45,7 @@ function App() {
 
   const handleLogout = () => {
     console.log('👋 Logging out user...');
+    console.trace('🔍 Logout called from:'); // ⭐ This will show WHERE logout is being called from
     localStorage.removeItem('user');
     setUser(null);
     setIsAuthenticated(false);
@@ -116,11 +99,15 @@ function App() {
           <Route
             path="/login"
             element={
-              <Login
-                setIsAuthenticated={setIsAuthenticated}
-                setUser={setUser}
-                isAuthenticated={isAuthenticated}
-              />
+              isAuthenticated ? (
+                <Navigate to="/" replace />
+              ) : (
+                <Login
+                  setIsAuthenticated={setIsAuthenticated}
+                  setUser={setUser}
+                  isAuthenticated={isAuthenticated}
+                />
+              )
             }
           />
           
@@ -165,6 +152,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <AdminBookings user={user} />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/manage-content"
+            element={
+              <ProtectedRoute>
+                <ManageContent />
               </ProtectedRoute>
             }
           />

@@ -1,5 +1,3 @@
-// backend/controllers/artworkController.js
-
 const Artwork = require('../models/Artwork');
 
 // Get all artworks (with optional sorting)
@@ -122,6 +120,170 @@ exports.searchArtworks = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error searching artworks',
+      error: error.message
+    });
+  }
+};
+
+// ⭐ NEW: Create artwork (ADMIN ONLY)
+exports.createArtwork = async (req, res) => {
+  try {
+    console.log('==========================================');
+    console.log('🆕 CREATE ARTWORK CALLED');
+    console.log('👤 User:', req.user);
+    console.log('📦 Request body:', req.body);
+    
+    // Check admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied. Admin only.'
+      });
+    }
+    
+    const { title, description, category, price, image_url, artist_id, is_bestseller } = req.body;
+    
+    // Validate
+    if (!title || !description || !category || !price || !image_url || !artist_id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide all required fields'
+      });
+    }
+    
+    const artworkId = await Artwork.create({
+      title,
+      description,
+      category,
+      price,
+      image_url,
+      artist_id,
+      is_bestseller: is_bestseller || false
+    });
+    
+    console.log('✅ Artwork created with ID:', artworkId);
+    
+    res.status(201).json({
+      success: true,
+      message: 'Artwork created successfully',
+      data: { artwork_id: artworkId }
+    });
+  } catch (error) {
+    console.error('❌ Error creating artwork:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error creating artwork',
+      error: error.message
+    });
+  }
+};
+
+// ⭐ NEW: Update artwork (ADMIN ONLY)
+exports.updateArtwork = async (req, res) => {
+  try {
+    console.log('==========================================');
+    console.log('🔄 UPDATE ARTWORK CALLED');
+    console.log('👤 User:', req.user);
+    console.log('📝 Artwork ID:', req.params.id);
+    console.log('📦 Request body:', req.body);
+    
+    // Check admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied. Admin only.'
+      });
+    }
+    
+    const { title, description, category, price, image_url, artist_id, is_bestseller } = req.body;
+    
+    // Validate
+    if (!title || !description || !category || !price || !image_url || !artist_id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide all required fields'
+      });
+    }
+    
+    const updatedArtwork = await Artwork.update(req.params.id, {
+      title,
+      description,
+      category,
+      price,
+      image_url,
+      artist_id,
+      is_bestseller: is_bestseller || false
+    });
+    
+    if (!updatedArtwork) {
+      return res.status(404).json({
+        success: false,
+        message: 'Artwork not found'
+      });
+    }
+    
+    console.log('✅ Artwork updated successfully');
+    
+    res.status(200).json({
+      success: true,
+      message: 'Artwork updated successfully',
+      data: updatedArtwork
+    });
+  } catch (error) {
+    console.error('❌ Error updating artwork:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error updating artwork',
+      error: error.message
+    });
+  }
+};
+
+// ⭐ NEW: Delete artwork (ADMIN ONLY)
+exports.deleteArtwork = async (req, res) => {
+  try {
+    console.log('==========================================');
+    console.log('🗑️ DELETE ARTWORK CALLED');
+    console.log('👤 User:', req.user);
+    console.log('📝 Artwork ID:', req.params.id);
+    
+    // Check admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied. Admin only.'
+      });
+    }
+    
+    const deletedArtwork = await Artwork.delete(req.params.id);
+    
+    if (!deletedArtwork) {
+      return res.status(404).json({
+        success: false,
+        message: 'Artwork not found'
+      });
+    }
+    
+    console.log('✅ Artwork deleted successfully');
+    
+    res.status(200).json({
+      success: true,
+      message: 'Artwork deleted successfully',
+      data: deletedArtwork
+    });
+  } catch (error) {
+    console.error('❌ Error deleting artwork:', error);
+    
+    if (error.message.includes('existing bookings')) {
+      return res.status(400).json({
+        success: false,
+        message: 'Cannot delete artwork with existing bookings.'
+      });
+    }
+    
+    res.status(500).json({
+      success: false,
+      message: 'Error deleting artwork',
       error: error.message
     });
   }

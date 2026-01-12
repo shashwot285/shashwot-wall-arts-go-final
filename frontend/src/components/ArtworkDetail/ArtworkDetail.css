@@ -39,7 +39,7 @@
 }
 
 .artwork-image-section {
-  position: sticky; /* Keeps image visible while scrolling info */
+  position: sticky;
   top: 20px;
   display: flex;
   align-items: flex-start;
@@ -53,26 +53,27 @@
   max-height: 80vh;
   object-fit: contain;
   border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
 .bestseller-badge {
   position: absolute;
   top: 15px;
   right: 15px;
-  background: #000000; /* Professional Dark Navy */
-  color: white;
-  padding: 8px 16px;
-  border-radius: 25px;
-  font-weight: bold;
-  font-size: 0.9em;
+  background: #fef3c7;
+  color: #92400e;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .artwork-info-section {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  /* REMOVED max-height and overflow-y to eliminate inside scroll */
 }
 
 .artwork-title {
@@ -120,7 +121,7 @@
 
 .price-amount {
   font-size: 1.8em;
-  color: #000000; /* REMOVED RED - Changed to Professional Dark */
+  color: #000000;
   font-weight: bold;
 }
 
@@ -177,7 +178,7 @@
 
 .book-now-btn {
   padding: 16px 35px;
-  background: #000000; /* Professional Dark Grey/Black */
+  background: #000000;
   color: white;
   border: none;
   border-radius: 10px;
@@ -195,7 +196,6 @@
   box-shadow: 0 8px 25px rgba(0,0,0,0.2);
 }
 
-/* Modal Styles - REVERTED TO ORIGINAL */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -252,7 +252,6 @@
   color: white;
 }
 
-/* Responsive Design */
 @media (max-width: 968px) {
   .artwork-content {
     grid-template-columns: 1fr;

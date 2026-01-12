@@ -21,7 +21,7 @@ function SplashScreen({ onFinish }) {
     // Auto-hide after 3 seconds
     const timer = setTimeout(() => {
       onFinish();
-    }, 3000);
+    }, 2000);
 
     return () => {
       clearInterval(progressInterval);

@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const artworkController = require('../controllers/artworkController');
+const { authenticateToken } = require('../middleware/auth');
 
-// Search artworks (must be before /:id route)
+// Public routes (no auth needed)
 router.get('/search', artworkController.searchArtworks);
-
-// Get artworks by artist
 router.get('/artist/:artistId', artworkController.getArtworksByArtist);
-
-// Get all artworks (with optional sorting)
 router.get('/', artworkController.getAllArtworks);
-
-// Get single artwork
 router.get('/:id', artworkController.getArtworkById);
+
+// Protected routes (admin only)
+router.post('/', authenticateToken, artworkController.createArtwork);
+router.patch('/:id', authenticateToken, artworkController.updateArtwork);
+router.delete('/:id', authenticateToken, artworkController.deleteArtwork);
 
 module.exports = router;

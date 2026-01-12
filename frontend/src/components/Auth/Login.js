@@ -1,13 +1,12 @@
 // frontend/src/components/Auth/Login.js
 
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { authAPI } from '../../services/api';
 import './Auth.css';
 
-const Login = ({ setIsAuthenticated, setUser, isAuthenticated }) => {
+const Login = ({ setIsAuthenticated, setUser }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [searchParams] = useSearchParams();
   
   const [formData, setFormData] = useState({
@@ -16,32 +15,19 @@ const Login = ({ setIsAuthenticated, setUser, isAuthenticated }) => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
-  // ⭐ NEW - Field-specific errors
   const [fieldErrors, setFieldErrors] = useState({});
 
   const { email, password } = formData;
-
-  // ⭐ NEW: Handle redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      const redirectTo = searchParams.get('redirect') || '/';
-      console.log('🔄 Already authenticated on Login page, redirecting to:', redirectTo);
-      navigate(redirectTo, { replace: true });
-    }
-  }, [isAuthenticated, searchParams, navigate]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     
-    // ⭐ NEW - Clear field error when user starts typing
     if (fieldErrors[name]) {
       setFieldErrors({ ...fieldErrors, [name]: '' });
     }
   };
 
-  // ⭐ NEW - Validate individual field on blur
   const validateField = (name, value) => {
     let error = '';
 
@@ -69,7 +55,6 @@ const Login = ({ setIsAuthenticated, setUser, isAuthenticated }) => {
     return error;
   };
 
-  // ⭐ NEW - Handle blur event
   const handleBlur = (e) => {
     const { name, value } = e.target;
     const error = validateField(name, value);
@@ -79,7 +64,6 @@ const Login = ({ setIsAuthenticated, setUser, isAuthenticated }) => {
     }
   };
 
-  // ⭐ MODIFIED - Validate all fields before submit
   const validateForm = () => {
     const errors = {};
 
@@ -103,7 +87,6 @@ const Login = ({ setIsAuthenticated, setUser, isAuthenticated }) => {
     setError('');
     setFieldErrors({});
 
-    // ⭐ NEW - Validate all fields
     const errors = validateForm();
     
     if (Object.keys(errors).length > 0) {
@@ -137,15 +120,19 @@ const Login = ({ setIsAuthenticated, setUser, isAuthenticated }) => {
         console.log('💾 Storing in localStorage:', userToStore);
         localStorage.setItem('user', JSON.stringify(userToStore));
         
+        // Update parent state
         setUser(userToStore);
         setIsAuthenticated(true);
         
-        console.log('✅ Login successful, redirecting...');
+        console.log('✅ Login successful, state updated');
         
-        // ⭐ FIXED: Read from URL parameter
-        const redirectTo = searchParams.get('redirect') || location.state?.from || '/';
-        console.log('🎯 Redirecting to:', redirectTo);
-        navigate(redirectTo, { replace: true });
+        // ⭐ Wait a tiny bit for state to propagate, then redirect
+        const redirectTo = searchParams.get('redirect') || '/';
+        console.log('🔄 Redirecting to:', redirectTo);
+        
+        setTimeout(() => {
+          navigate(redirectTo, { replace: true });
+        }, 100);
       }
     } catch (err) {
       console.error('❌ Login error:', err);

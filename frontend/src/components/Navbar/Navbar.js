@@ -62,6 +62,17 @@ const Navbar = ({ isAuthenticated, user, onLogout }) => {
                     {user?.role === 'admin' ? '📁 Bookings' : '📁 My Bookings'}
                   </Link>
 
+                  {/* ⭐ NEW: Manage Content button for admin */}
+                  {user?.role === 'admin' && (
+                    <Link
+                      to="/admin/manage-content"
+                      className="dropdown-item"
+                      onClick={() => setShowUserMenu(false)}
+                    >
+                      🎨 Manage Content
+                    </Link>
+                  )}
+
                   <button
                     onClick={handleLogout}
                     className="dropdown-item logout"

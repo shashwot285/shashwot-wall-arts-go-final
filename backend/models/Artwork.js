@@ -114,6 +114,93 @@ class Artwork {
       throw error;
     }
   }
+
+  // ⭐ NEW: Create artwork
+  static async create(data) {
+    try {
+      console.log('🆕 Creating new artwork:', data.title);
+      const result = await db.query(
+        `INSERT INTO artworks 
+         (title, description, category, price, image_url, artist_id, is_bestseller)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
+         RETURNING artwork_id`,
+        [
+          data.title,
+          data.description,
+          data.category,
+          parseFloat(data.price),
+          data.image_url,
+          parseInt(data.artist_id),
+          data.is_bestseller || false
+        ]
+      );
+      console.log('✅ Artwork created with ID:', result.rows[0].artwork_id);
+      return result.rows[0].artwork_id;
+    } catch (error) {
+      console.error('❌ Error in Artwork.create:', error.message);
+      throw error;
+    }
+  }
+
+  // ⭐ NEW: Update artwork
+  static async update(id, data) {
+    try {
+      console.log('🔄 Updating artwork ID:', id);
+      const result = await db.query(
+        `UPDATE artworks 
+         SET title = $1, description = $2, category = $3, price = $4, 
+             image_url = $5, artist_id = $6, is_bestseller = $7
+         WHERE artwork_id = $8
+         RETURNING *`,
+        [
+          data.title,
+          data.description,
+          data.category,
+          parseFloat(data.price),
+          data.image_url,
+          parseInt(data.artist_id),
+          data.is_bestseller || false,
+          id
+        ]
+      );
+      
+      if (result.rows.length === 0) {
+        console.log('⚠️ No artwork found to update with ID:', id);
+        return null;
+      }
+      
+      console.log('✅ Artwork updated:', result.rows[0].title);
+      return result.rows[0];
+    } catch (error) {
+      console.error('❌ Error in Artwork.update:', error.message);
+      throw error;
+    }
+  }
+
+  // ⭐ FIXED: Delete artwork (removed booking check)
+  static async delete(id) {
+    try {
+      console.log('🗑️ Deleting artwork ID:', id);
+      
+      // ❌ REMOVED BOOKING CHECK - Just delete the artwork
+      
+      const result = await db.query(
+        'DELETE FROM artworks WHERE artwork_id = $1 RETURNING artwork_id',
+        [id]
+      );
+      
+      if (result.rows.length === 0) {
+        console.log('⚠️ No artwork found to delete with ID:', id);
+        return null;
+      }
+      
+      console.log('✅ Artwork deleted:', id);
+      return result.rows[0];
+    } catch (error) {
+      console.error('❌ Error in Artwork.delete:', error.message);
+      throw error;
+    }
+  }
 }
 
 module.exports = Artwork;
