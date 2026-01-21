@@ -57,7 +57,15 @@ export const artworkAPI = {
   searchArtworks: (searchTerm) => api.get('/artworks/search', { params: { q: searchTerm } }),
   createArtwork: (data) => api.post('/artworks', data),
   updateArtwork: (id, data) => api.patch(`/artworks/${id}`, data),
-  deleteArtwork: (id) => api.delete(`/artworks/${id}`)
+  deleteArtwork: (id) => api.delete(`/artworks/${id}`),
+  // ⭐ NEW: Upload image
+  uploadImage: (formData) => {
+    return api.post('/artworks/upload-image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+  }
 };
 
 // Artist APIs
@@ -81,7 +89,7 @@ export const bookingAPI = {
   getUserBookings: () => api.get('/bookings/my-bookings'),
   getAllBookings: () => api.get('/bookings/all-bookings'), 
   updateBookingStatus: (id, status) => api.patch(`/bookings/${id}/status`, { status }),
-  cancelBooking: (id) => api.patch(`/bookings/${id}/cancel`), // ⭐ NEW: User cancel
+  cancelBooking: (id) => api.patch(`/bookings/${id}/cancel`),
   getBookingById: (id) => api.get(`/bookings/${id}`)
 };
 

@@ -141,7 +141,7 @@ exports.createArtwork = async (req, res) => {
       });
     }
     
-    const { title, description, category, price, image_url, artist_id, is_bestseller } = req.body;
+    const { title, description, category, price, image_url, artist_id, is_bestseller, wall_size } = req.body;
     
     // Validate
     if (!title || !description || !category || !price || !image_url || !artist_id) {
@@ -158,7 +158,8 @@ exports.createArtwork = async (req, res) => {
       price,
       image_url,
       artist_id,
-      is_bestseller: is_bestseller || false
+      is_bestseller: is_bestseller || false,
+      wall_size: wall_size || null
     });
     
     console.log('✅ Artwork created with ID:', artworkId);
@@ -195,7 +196,7 @@ exports.updateArtwork = async (req, res) => {
       });
     }
     
-    const { title, description, category, price, image_url, artist_id, is_bestseller } = req.body;
+    const { title, description, category, price, image_url, artist_id, is_bestseller, wall_size } = req.body;
     
     // Validate
     if (!title || !description || !category || !price || !image_url || !artist_id) {
@@ -212,7 +213,8 @@ exports.updateArtwork = async (req, res) => {
       price,
       image_url,
       artist_id,
-      is_bestseller: is_bestseller || false
+      is_bestseller: is_bestseller || false,
+      wall_size: wall_size || null
     });
     
     if (!updatedArtwork) {
@@ -284,6 +286,53 @@ exports.deleteArtwork = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error deleting artwork',
+      error: error.message
+    });
+  }
+};
+
+// ⭐ NEW: Upload image (ADMIN ONLY)
+exports.uploadImage = async (req, res) => {
+  try {
+    console.log('==========================================');
+    console.log('📸 IMAGE UPLOAD CALLED');
+    console.log('👤 User:', req.user);
+    console.log('📁 File:', req.file);
+    
+    // Check admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied. Admin only.'
+      });
+    }
+    
+    // Check if file exists
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please upload an image file'
+      });
+    }
+    
+    // Return just the filename (not the full path)
+    const imageUrl = req.file.filename;
+    
+    console.log('✅ Image uploaded:', imageUrl);
+    
+    res.status(200).json({
+      success: true,
+      message: 'Image uploaded successfully',
+      data: {
+        image_url: imageUrl,
+        full_path: `/wall_arts/${imageUrl}`
+      }
+    });
+  } catch (error) {
+    console.error('❌ Error uploading image:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error uploading image',
       error: error.message
     });
   }

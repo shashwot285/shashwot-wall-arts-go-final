@@ -1,5 +1,4 @@
 // backend/controllers/authController.js
-
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
@@ -8,7 +7,7 @@ exports.register = async (req, res) => {
   try {
     const { username, email, password, full_name, phone } = req.body;
     
-    console.log('📝 Registration attempt:', { username, email, full_name });
+    console.log('📝 Registration attempt:', { username, email, full_name, phone });
     
     // Validate input
     if (!username || !email || !password) {
@@ -51,6 +50,7 @@ exports.register = async (req, res) => {
         username: newUser.username,
         email: newUser.email,
         full_name: newUser.full_name,
+        phone: newUser.phone, // ⭐ ADDED: Include phone in response
         role: newUser.role || 'user',
         token: token
       }
@@ -121,6 +121,7 @@ exports.login = async (req, res) => {
         username: user.username,
         email: user.email,
         full_name: user.full_name,
+        phone: user.phone, // ⭐ ADDED: Include phone in response
         role: user.role || 'user',
         token: token
       }

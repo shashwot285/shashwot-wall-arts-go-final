@@ -13,7 +13,6 @@ function ManageContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
-  // ⭐ NEW: Artist filter for artworks
   const [selectedArtistFilter, setSelectedArtistFilter] = useState('all');
   
   // Notification state
@@ -32,6 +31,11 @@ function ManageContent() {
   const [editingArtist, setEditingArtist] = useState(null);
   const [editingArtwork, setEditingArtwork] = useState(null);
   
+  // ⭐ NEW: Image upload states
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+  
   const [artistForm, setArtistForm] = useState({
     artist_name: '',
     bio: '',
@@ -46,7 +50,8 @@ function ManageContent() {
     price: '',
     image_url: '',
     artist_id: '',
-    is_bestseller: false
+    is_bestseller: false,
+    wall_size: ''
   });
 
   // Notification helper
@@ -113,12 +118,61 @@ function ManageContent() {
     }
   };
 
-  // ⭐ NEW: Get filtered artworks by artist
   const getFilteredArtworks = () => {
     if (selectedArtistFilter === 'all') {
       return artworks;
     }
     return artworks.filter(artwork => artwork.artist_id === parseInt(selectedArtistFilter));
+  };
+
+  // ⭐ NEW: Handle file selection
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+      
+      console.log('📁 File selected:', file.name);
+    }
+  };
+
+  // ⭐ NEW: Upload image to server
+  const handleImageUpload = async () => {
+    if (!selectedFile) {
+      showNotification('Please select an image first', 'error');
+      return;
+    }
+
+    try {
+      setUploading(true);
+      console.log('📤 Uploading image...');
+
+      const formData = new FormData();
+      formData.append('image', selectedFile);
+
+      const response = await artworkAPI.uploadImage(formData);
+      console.log('✅ Upload response:', response.data);
+
+      const uploadedFilename = response.data.data.image_url;
+      
+      // Set the filename in the form
+      setArtworkForm({ ...artworkForm, image_url: uploadedFilename });
+      
+      showNotification('Image uploaded successfully!', 'success');
+      console.log('✅ Image filename set:', uploadedFilename);
+      
+      setUploading(false);
+    } catch (error) {
+      console.error('❌ Upload error:', error);
+      showNotification(error.response?.data?.message || 'Failed to upload image', 'error');
+      setUploading(false);
+    }
   };
 
   // ========== ARTIST FUNCTIONS ==========
@@ -185,6 +239,13 @@ function ManageContent() {
   
   const handleArtworkSubmit = async (e) => {
     e.preventDefault();
+    
+    // ⭐ MODIFIED: Check if image is uploaded
+    if (!artworkForm.image_url) {
+      showNotification('Please upload an image first', 'error');
+      return;
+    }
+    
     try {
       console.log('💾 Saving artwork:', artworkForm);
       
@@ -201,6 +262,7 @@ function ManageContent() {
       
       await fetchData();
       
+      // Reset form
       setArtworkForm({
         title: '',
         description: '',
@@ -208,8 +270,11 @@ function ManageContent() {
         price: '',
         image_url: '',
         artist_id: '',
-        is_bestseller: false
+        is_bestseller: false,
+        wall_size: ''
       });
+      setSelectedFile(null);
+      setImagePreview(null);
       setEditingArtwork(null);
       setShowArtworkForm(false);
     } catch (error) {
@@ -228,8 +293,13 @@ function ManageContent() {
       price: artwork.price,
       image_url: artwork.image_url.replace('/wall_arts/', ''),
       artist_id: artwork.artist_id,
-      is_bestseller: artwork.is_bestseller || false
+      is_bestseller: artwork.is_bestseller || false,
+      wall_size: artwork.wall_size || ''
     });
+    
+    // Set preview to existing image
+    setImagePreview(getImageURL(artwork.image_url));
+    
     setShowArtworkForm(true);
   };
 
@@ -406,7 +476,6 @@ function ManageContent() {
           <div className="section-header">
             <h2>Artworks</h2>
             <div className="header-actions">
-              {/* ⭐ NEW: Artist Filter Dropdown */}
               <select
                 className="artist-filter"
                 value={selectedArtistFilter}
@@ -435,8 +504,11 @@ function ManageContent() {
                     price: '',
                     image_url: '',
                     artist_id: '',
-                    is_bestseller: false
+                    is_bestseller: false,
+                    wall_size: ''
                   });
+                  setSelectedFile(null);
+                  setImagePreview(null);
                 }}
               >
                 {showArtworkForm ? '✕ Cancel' : '+ Add Artwork'}
@@ -493,15 +565,59 @@ function ManageContent() {
               </div>
 
               <div className="form-group">
-                <label>Image Filename * (e.g., artwork1.jpg)</label>
-                <input
-                  type="text"
-                  value={artworkForm.image_url}
-                  onChange={(e) => setArtworkForm({ ...artworkForm, image_url: e.target.value })}
-                  required
-                  placeholder="artwork1.jpg"
-                />
-                <small>Image must exist in /wall_arts/ folder</small>
+                <label>Wall Size</label>
+                <select
+                  value={artworkForm.wall_size}
+                  onChange={(e) => setArtworkForm({ ...artworkForm, wall_size: e.target.value })}
+                >
+                  <option value="">Select size (optional)</option>
+                  <option value="Small (2x3 ft)">Small (2x3 ft)</option>
+                  <option value="Medium (3x4 ft)">Medium (3x4 ft)</option>
+                  <option value="Large (4x5 ft)">Large (4x5 ft)</option>
+                  <option value="Extra Large (5x6 ft)">Extra Large (5x6 ft)</option>
+                </select>
+              </div>
+
+              {/* ⭐ NEW: Image Upload Section */}
+              <div className="form-group">
+                <label>Artwork Image *</label>
+                <div className="image-upload-section">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileSelect}
+                    id="image-input"
+                    style={{ display: 'none' }}
+                  />
+                  <label htmlFor="image-input" className="file-select-btn">
+                    📁 Choose Image
+                  </label>
+                  
+                  {selectedFile && (
+                    <span className="file-name">{selectedFile.name}</span>
+                  )}
+                  
+                  {selectedFile && !artworkForm.image_url && (
+                    <button
+                      type="button"
+                      onClick={handleImageUpload}
+                      disabled={uploading}
+                      className="upload-btn"
+                    >
+                      {uploading ? '⏳ Uploading...' : '📤 Upload'}
+                    </button>
+                  )}
+                  
+                  {artworkForm.image_url && (
+                    <span className="success-indicator">✅ Uploaded: {artworkForm.image_url}</span>
+                  )}
+                </div>
+                
+                {imagePreview && (
+                  <div className="image-preview">
+                    <img src={imagePreview} alt="Preview" />
+                  </div>
+                )}
               </div>
 
               <div className="form-group">
@@ -531,7 +647,7 @@ function ManageContent() {
                 </label>
               </div>
 
-              <button type="submit" className="submit-button">
+              <button type="submit" className="submit-button" disabled={uploading}>
                 {editingArtwork ? 'Update Artwork' : 'Create Artwork'}
               </button>
             </form>

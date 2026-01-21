@@ -49,8 +49,8 @@ function ArtistProfile() {
   const totalViews = artworks.reduce((sum, art) => sum + art.views, 0);
   const bestsellerCount = artworks.filter(art => art.is_bestseller).length;
   const avgPrice = artworks.length > 0 
-    ? artworks.reduce((sum, art) => sum + art.price, 0) / artworks.length 
-    : 0;
+  ? artworks.reduce((sum, art) => sum + (parseFloat(art.price) || 0), 0) / artworks.length 
+  : 0;
 
   if (loading) {
     return (
@@ -105,17 +105,17 @@ function ArtistProfile() {
           <div className="stat-label">Total Artworks</div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">⭐</div>
+          <div className="stat-icon"></div>
           <div className="stat-value">{bestsellerCount}</div>
           <div className="stat-label">Best Sellers</div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">👁️</div>
+          <div className="stat-icon"></div>
           <div className="stat-value">{totalViews}</div>
           <div className="stat-label">Total Views</div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">💰</div>
+          <div className="stat-icon"></div>
           <div className="stat-value">NPR {Math.round(avgPrice).toLocaleString()}</div>
           <div className="stat-label">Avg. Price</div>
         </div>

@@ -115,8 +115,8 @@ function ArtworkDetail() {
 
           <div className="artist-contact-section">
             <h3>Artist Contact</h3>
-            <p><strong>Email:</strong> {artwork.contact_email || 'N/A'}</p>
-            {artwork.phone && <p><strong>Phone:</strong> {artwork.phone}</p>}
+            <p><strong>Email:</strong> {artwork.artist_email || 'N/A'}</p>
+            {artwork.artist_phone && <p><strong>Phone:</strong> {artwork.artist_phone}</p>}
           </div>
 
           <button className="book-now-btn" onClick={handleBookNow}>
@@ -137,12 +137,72 @@ function ArtworkDetail() {
 
 function BookingModal({ artwork, onClose }) {
   const navigate = useNavigate();
+  
+  // ⭐ ONLY CHANGE: Check if user is authenticated
+  const user = localStorage.getItem('user');
+  const isAuthenticated = !!user;
+
+  const handleLogin = () => {
+    onClose();
+    navigate(`/login?redirect=${encodeURIComponent(`/booking/${artwork.artwork_id}`)}`);
+  };
+
+  const handleSignup = () => {
+    onClose();
+    navigate(`/signup?redirect=${encodeURIComponent(`/booking/${artwork.artwork_id}`)}`);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     navigate(`/booking/${artwork.artwork_id}`);
   };
 
+  // ⭐ ONLY CHANGE: Show auth required modal if not logged in
+  if (!isAuthenticated) {
+    return (
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <button className="modal-close" onClick={onClose}>×</button>
+          
+          <h2>🔐 Account Required</h2>
+          <p className="modal-subtitle">You need an account to book this artwork</p>
+
+          <p className="modal-info" style={{margin: '20px 0', lineHeight: '1.5'}}>
+            To book <strong>{artwork.title}</strong> for <strong>NPR {artwork.price?.toLocaleString()}</strong>, please login to your existing account or create a new one.
+          </p>
+
+          <div className="modal-actions" style={{flexDirection: 'column', gap: '10px'}}>
+            <button 
+              type="button" 
+              className="submit-btn" 
+              onClick={handleLogin}
+              style={{width: '100%'}}
+            >
+              Login to Existing Account
+            </button>
+            <button 
+              type="button" 
+              className="cancel-btn" 
+              onClick={handleSignup}
+              style={{width: '100%', background: 'white', color: '#667eea', border: '2px solid #667eea'}}
+            >
+              Create New Account
+            </button>
+            <button 
+              type="button" 
+              className="cancel-btn" 
+              onClick={onClose}
+              style={{width: '100%', marginTop: '10px'}}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ⭐ UNCHANGED: Original modal for authenticated users
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>

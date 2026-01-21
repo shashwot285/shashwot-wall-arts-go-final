@@ -29,15 +29,26 @@ function App() {
     const checkAuth = () => {
       console.log('🔍 Checking authentication status...');
       
-      // ⭐ ADDED: Clear localStorage on app open - NO AUTO-LOGIN
-      localStorage.removeItem('user');
-      console.log('🧹 Cleared any existing session - manual login required');
+      const loggedInUser = localStorage.getItem('user');
       
-      setUser(null);
-      setIsAuthenticated(false);
+      if (loggedInUser) {
+        try {
+          const userData = JSON.parse(loggedInUser);
+          
+          console.log('👤 Found user in localStorage:', userData);
+          
+          // ⭐ DISABLED AUTO-LOGIN - Clear any saved session on page load
+          console.log('🧹 Clearing saved session - manual login required');
+          localStorage.removeItem('user');
+        } catch (error) {
+          console.error('❌ Error parsing user data:', error);
+          localStorage.removeItem('user');
+        }
+      } else {
+        console.log('ℹ️ No user found in localStorage');
+      }
+      
       setLoadingUser(false);
-      
-      console.log('ℹ️ No user found in localStorage');
     };
     
     checkAuth();
@@ -45,7 +56,6 @@ function App() {
 
   const handleLogout = () => {
     console.log('👋 Logging out user...');
-    console.trace('🔍 Logout called from:'); // ⭐ This will show WHERE logout is being called from
     localStorage.removeItem('user');
     setUser(null);
     setIsAuthenticated(false);
@@ -105,7 +115,6 @@ function App() {
                 <Login
                   setIsAuthenticated={setIsAuthenticated}
                   setUser={setUser}
-                  isAuthenticated={isAuthenticated}
                 />
               )
             }

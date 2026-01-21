@@ -1,6 +1,6 @@
 // frontend/src/components/Auth/Login.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { authAPI } from '../../services/api';
 import './Auth.css';
@@ -18,6 +18,16 @@ const Login = ({ setIsAuthenticated, setUser }) => {
   const [fieldErrors, setFieldErrors] = useState({});
 
   const { email, password } = formData;
+
+  // ⭐ NEW: If already authenticated, redirect immediately
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      const redirectTo = searchParams.get('redirect') || '/';
+      console.log('ℹ️ Already authenticated, redirecting to:', redirectTo);
+      navigate(redirectTo, { replace: true });
+    }
+  }, [navigate, searchParams]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -113,6 +123,7 @@ const Login = ({ setIsAuthenticated, setUser }) => {
           username: userData.username,
           email: userData.email,
           full_name: userData.full_name,
+          phone: userData.phone, // ⭐ ADDED: Store phone
           role: userData.role,
           token: userData.token
         };

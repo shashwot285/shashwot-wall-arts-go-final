@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { artworkAPI, bookingAPI, getImageURL } from '../../services/api';
 import './Booking.css';
 
-function Booking() {
+function Booking({ user }) { // ⭐ Accept user prop
   const { artworkId } = useParams();
   const navigate = useNavigate();
   
@@ -23,6 +23,31 @@ function Booking() {
     delivery_address: '',
     special_instructions: ''
   });
+
+  // ⭐ NEW: Auto-fill user data when user is available
+  useEffect(() => {
+    if (user) {
+      console.log('👤 Auto-filling user data from props:', user);
+      setFormData(prevData => ({
+        ...prevData,
+        customer_name: user.full_name || '',
+        email: user.email || '',
+        phone: user.phone || '' // If phone exists in user object
+      }));
+    } else {
+      // If user prop is not available, try localStorage
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      if (storedUser) {
+        console.log('👤 Auto-filling user data from localStorage:', storedUser);
+        setFormData(prevData => ({
+          ...prevData,
+          customer_name: storedUser.full_name || '',
+          email: storedUser.email || '',
+          phone: storedUser.phone || ''
+        }));
+      }
+    }
+  }, [user]);
 
   // Fetch artwork details
   useEffect(() => {
@@ -60,14 +85,14 @@ function Booking() {
       console.log('📝 SUBMITTING BOOKING');
       
       // Get user data from localStorage
-      const user = JSON.parse(localStorage.getItem('user'));
+      const userData = JSON.parse(localStorage.getItem('user'));
       console.log('👤 Current user:', {
-        user_id: user?.user_id,
-        email: user?.email,
-        hasToken: !!user?.token
+        user_id: userData?.user_id,
+        email: userData?.email,
+        hasToken: !!userData?.token
       });
 
-      if (!user || !user.token) {
+      if (!userData || !userData.token) {
         throw new Error('User not authenticated. Please login again.');
       }
 
@@ -172,7 +197,7 @@ function Booking() {
 
   return (
     <div className="booking-container">
-      {/* ⭐ BACK BUTTON */}
+      {/* Back Button */}
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         <button onClick={() => navigate(-1)} className="back-btn">
           ← Back
@@ -180,7 +205,7 @@ function Booking() {
       </div>
 
       <div className="booking-content">
-        {/* ⭐ SIMPLIFIED: Just Image and Price Tag */}
+        {/* Artwork Preview */}
         <div className="artwork-preview">
           <img 
             src={getImageURL(artwork.image_url)} 

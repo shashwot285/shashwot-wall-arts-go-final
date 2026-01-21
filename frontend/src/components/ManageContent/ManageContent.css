@@ -541,3 +541,75 @@
   border: 1px solid #e5e7eb;
   border-radius: 12px;
 }
+/* ⭐ NEW: Image Upload Styles */
+.image-upload-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.file-select-btn {
+  padding: 8px 16px;
+  background: #f3f4f6;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.file-select-btn:hover {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.file-name {
+  font-size: 14px;
+  color: #6b7280;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upload-btn {
+  padding: 8px 16px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.upload-btn:hover:not(:disabled) {
+  background: #5568d3;
+}
+
+.upload-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.success-indicator {
+  color: #10b981;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.image-preview {
+  margin-top: 10px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px;
+  max-width: 300px;
+}
+
+.image-preview img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}

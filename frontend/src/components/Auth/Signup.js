@@ -1,13 +1,13 @@
 // frontend/src/components/Auth/Signup.js
 
-import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { authAPI } from '../../services/api';
 import './Auth.css';
 
 const Signup = ({ setIsAuthenticated, setUser }) => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const [searchParams] = useSearchParams();
   
   const [formData, setFormData] = useState({
     username: '',
@@ -19,23 +19,28 @@ const Signup = ({ setIsAuthenticated, setUser }) => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
-  // ⭐ NEW - Field-specific errors
   const [fieldErrors, setFieldErrors] = useState({});
 
   const { username, email, password, confirmPassword, full_name, phone } = formData;
+
+  // ⭐ DEBUG: Log when component mounts
+  useEffect(() => {
+    console.log('🔍 SIGNUP COMPONENT MOUNTED');
+    console.log('🔍 Current URL:', window.location.href);
+    console.log('🔍 Search params string:', window.location.search);
+    console.log('🔍 Redirect param value:', searchParams.get('redirect'));
+    console.log('🔍 All params:', Object.fromEntries(searchParams.entries()));
+  }, [searchParams]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     
-    // ⭐ NEW - Clear field error when user starts typing
     if (fieldErrors[name]) {
       setFieldErrors({ ...fieldErrors, [name]: '' });
     }
   };
 
-  // ⭐ NEW - Validate individual field on blur
   const validateField = (name, value) => {
     let error = '';
 
@@ -81,7 +86,6 @@ const Signup = ({ setIsAuthenticated, setUser }) => {
     return error;
   };
 
-  // ⭐ NEW - Handle blur event
   const handleBlur = (e) => {
     const { name, value } = e.target;
     const error = validateField(name, value);
@@ -91,11 +95,9 @@ const Signup = ({ setIsAuthenticated, setUser }) => {
     }
   };
 
-  // ⭐ MODIFIED - Validate all fields before submit
   const validateForm = () => {
     const errors = {};
 
-    // Required fields
     if (!username.trim()) {
       errors.username = 'Username is required';
     } else if (username.length < 3) {
@@ -130,7 +132,6 @@ const Signup = ({ setIsAuthenticated, setUser }) => {
     setError('');
     setFieldErrors({});
 
-    // ⭐ NEW - Validate all fields
     const errors = validateForm();
     
     if (Object.keys(errors).length > 0) {
@@ -142,6 +143,7 @@ const Signup = ({ setIsAuthenticated, setUser }) => {
 
     try {
       console.log('📝 Attempting signup...');
+      console.log('🔍 BEFORE SIGNUP - Redirect param:', searchParams.get('redirect'));
       
       const response = await authAPI.register({ 
         username, 
@@ -152,7 +154,7 @@ const Signup = ({ setIsAuthenticated, setUser }) => {
       });
       
       console.log('✅ Signup response:', response.data);
-      
+
       if (response.data.success) {
         const userData = response.data.data;
         
@@ -163,6 +165,7 @@ const Signup = ({ setIsAuthenticated, setUser }) => {
           username: userData.username,
           email: userData.email,
           full_name: userData.full_name,
+          phone: userData.phone,
           role: userData.role,
           token: userData.token
         };
@@ -173,10 +176,16 @@ const Signup = ({ setIsAuthenticated, setUser }) => {
         setUser(userToStore);
         setIsAuthenticated(true);
         
-        console.log('✅ Signup successful, redirecting...');
+        console.log('✅ Signup successful, state updated');
         
-        const from = location.state?.from || '/';
-        navigate(from, { replace: true });
+        const redirectTo = searchParams.get('redirect') || '/';
+        console.log('🔄 FINAL CHECK - searchParams.get redirect:', searchParams.get('redirect'));
+        console.log('🔄 Redirecting to:', redirectTo);
+        console.log('🔍 Full URL now:', window.location.href);
+        
+        setTimeout(() => {
+          navigate(redirectTo, { replace: true });
+        }, 100);
       }
     } catch (err) {
       console.error('❌ Signup error:', err);
@@ -304,7 +313,7 @@ const Signup = ({ setIsAuthenticated, setUser }) => {
 
         <div className="auth-footer">
           <p className="auth-switch">
-            Already have an account? <Link to="/login" state={location.state}>Login here</Link>
+            Already have an account? <Link to={`/login${searchParams.get('redirect') ? `?redirect=${searchParams.get('redirect')}` : ''}`}>Login here</Link>
           </p>
         </div>
       </div>
