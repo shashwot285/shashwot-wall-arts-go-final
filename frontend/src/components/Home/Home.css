@@ -1,9 +1,11 @@
+/* frontend/src/components/Home/Home.css */
+
 /* ===== ADJUST FOR NAVBAR ===== */
 .home-container {
   min-height: 100vh;
-  background: #fdfdfd; /* Clean, professional off-white */
+  background: #f5f1ed; /* Soft beige background */
   padding: 20px;
-  padding-top: 70px; /* Start right below navbar */
+  padding-top: 70px;
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -17,7 +19,7 @@
 /* ===== HEADER ===== */
 .header {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-              url('https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=1600') center/cover;
+              url('D:\WALL ARTS\frontend\public\wall_arts\hero_img.jpeg') center/cover;
   height: 45vh;
   display: flex;
   flex-direction: column;
@@ -53,14 +55,14 @@
   margin: 20px auto 40px auto;
   background: #ffffff;
   padding: 15px 30px;
-  padding-left: 50px; /* Align with artwork content (slider has 40px + 10px) */
-  padding-right: 100px; /* Extended white space on right side */
+  padding-left: 50px;
+  padding-right: 100px;
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  border: 1px solid #eeeeee;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); /* Soft, elegant shadow */
+  border: none;
   position: sticky;
-  top: 70px; /* Stick below navbar (navbar height = 70px) */
-  z-index: 999; /* Below navbar (navbar z-index = 1000) */
+  top: 70px;
+  z-index: 999;
 }
 
 .sort-options {
@@ -111,7 +113,7 @@
   background: white;
   border: 1px solid #000000;
   border-radius: 4px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   z-index: 100;
   min-width: 180px;
   overflow: hidden;
@@ -145,7 +147,7 @@
 }
 
 .artist-section {
-  background: transparent; /* Minimalist look */
+  background: transparent;
   padding: 10px;
 }
 
@@ -199,7 +201,7 @@
   top: 40%;
   background: #ffffff;
   color: #000000;
-  border: 1px solid #000000;
+  border: 1px solid #e0e0e0;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -210,12 +212,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Soft shadow like reference */
 }
 
 .slider-arrow:hover {
   background: #000000;
   color: #ffffff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
 .slider-arrow.left { left: -10px; }
@@ -227,7 +230,7 @@
   overflow-x: auto;
   scroll-behavior: smooth;
   padding: 20px 0;
-  scrollbar-width: none; /* Hide scrollbar for cleaner look */
+  scrollbar-width: none;
 }
 
 .artworks-slider::-webkit-scrollbar {
@@ -240,18 +243,20 @@
   max-width: 320px !important;
   width: 320px !important;
   background: #ffffff;
-  border-radius: 0px;
+  border-radius: 12px; /* Rounded corners like reference */
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
   display: flex !important;
   flex-direction: column !important;
   flex-wrap: nowrap !important;
   align-items: stretch !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); /* Soft, elegant shadow */
 }
 
 .artworks-slider .artwork-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12); /* Deeper shadow on hover */
 }
 
 .artworks-slider .artwork-card .artwork-image-container {
@@ -289,10 +294,11 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .artworks-slider .artwork-card .artwork-info {
-  padding: 15px 10px !important;
+  padding: 20px !important;
   display: flex !important;
   flex-direction: column !important;
   gap: 8px;
@@ -330,7 +336,7 @@
   background: transparent;
   color: #000000;
   border: 1px solid #000000;
-  border-radius: 0px;
+  border-radius: 4px;
   cursor: pointer;
   font-weight: 700;
   font-size: 0.8rem;
@@ -374,6 +380,6 @@
   .artist-header { flex-direction: column; align-items: flex-start; gap: 15px; }
   .artwork-card { min-width: 260px; max-width: 260px; }
   .slider-container { padding: 0 10px; }
-  .slider-arrow { display: none; } /* Use touch scroll on mobile */
+  .slider-arrow { display: none; }
   .artworks-slider { scrollbar-width: auto; }
 }
