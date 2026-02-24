@@ -100,7 +100,7 @@ function ArtistProfile() {
       {/* Stats */}
       <div className="artist-stats">
         <div className="stat-card">
-          <div className="stat-icon">🎨</div>
+          <div className="stat-icon"></div>
           <div className="stat-value">{artworks.length}</div>
           <div className="stat-label">Total Artworks</div>
         </div>

@@ -9,6 +9,7 @@ import ArtworkDetail from './components/ArtworkDetail/ArtworkDetail';
 import ArtistProfile from './components/ArtistProfile/ArtistProfile';
 import Login from './components/Auth/Login';
 import Signup from './components/Auth/Signup';
+import ForgotPassword from './components/ForgotPassword/ForgotPassword'; // ⭐ NEW: Import ForgotPassword
 import Booking from './components/Booking/Booking';
 import MyBookings from './components/MyBookings/MyBookings';
 import AdminBookings from './components/AdminBookings/AdminBookings';
@@ -130,6 +131,18 @@ function App() {
                   setIsAuthenticated={setIsAuthenticated}
                   setUser={setUser}
                 />
+              )
+            }
+          />
+
+          {/* ⭐ NEW: Forgot Password Route */}
+          <Route
+            path="/forgot-password"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/" replace />
+              ) : (
+                <ForgotPassword />
               )
             }
           />

@@ -14,12 +14,12 @@ const pool = new Pool({
 
 pool.connect()
   .then(client => {
-    console.log('✅ PostgreSQL Database Connected Successfully');
-    console.log(`📊 Connected to database: ${process.env.DB_NAME}`);
+    console.log(' PostgreSQL Database Connected Successfully');
+    console.log(` Connected to database: ${process.env.DB_NAME}`);
     client.release();
   })
   .catch(err => {
-    console.error('❌ PostgreSQL Connection Error:', err.message);
+    console.error(' PostgreSQL Connection Error:', err.message);
   });
 
 module.exports = pool;

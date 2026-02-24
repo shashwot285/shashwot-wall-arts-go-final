@@ -92,6 +92,11 @@ const Login = ({ setIsAuthenticated, setUser }) => {
     return errors;
   };
 
+  // ⭐ NEW: Handle forgot password click with email
+  const handleForgotPassword = () => {
+    navigate('/forgot-password', { state: { email: email } });
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -123,7 +128,7 @@ const Login = ({ setIsAuthenticated, setUser }) => {
           username: userData.username,
           email: userData.email,
           full_name: userData.full_name,
-          phone: userData.phone, // ⭐ ADDED: Store phone
+          phone: userData.phone,
           role: userData.role,
           token: userData.token
         };
@@ -196,6 +201,13 @@ const Login = ({ setIsAuthenticated, setUser }) => {
             {fieldErrors.password && (
               <span className="field-error">{fieldErrors.password}</span>
             )}
+          </div>
+
+          {/* ⭐ MODIFIED: Forgot Password Link with email passing */}
+          <div className="forgot-password">
+            <span onClick={handleForgotPassword} style={{ cursor: 'pointer' }}>
+              Forgot Password?
+            </span>
           </div>
 
           <button type="submit" className="auth-button" disabled={loading}>

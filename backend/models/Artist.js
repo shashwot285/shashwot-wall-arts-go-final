@@ -92,14 +92,14 @@ class Artist {
       );
       
       if (result.rows.length === 0) {
-        console.log('⚠️ No artist found to delete with ID:', id);
+        console.log('No artist found to delete with ID:', id);
         return null;
       }
       
-      console.log('✅ Artist deleted:', id);
+      console.log(' Artist deleted:', id);
       return result.rows[0];
     } catch (error) {
-      console.error('❌ Error in Artist.delete:', error.message);
+      console.error(' Error in Artist.delete:', error.message);
       throw error;
     }
   }

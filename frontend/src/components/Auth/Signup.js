@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { authAPI } from '../../services/api';
+import { authAPI, passwordResetAPI } from '../../services/api';
 import './Auth.css';
 
 const Signup = ({ setIsAuthenticated, setUser }) => {
@@ -15,13 +15,21 @@ const Signup = ({ setIsAuthenticated, setUser }) => {
     password: '',
     confirmPassword: '',
     full_name: '',
-    phone: ''
+    phone: '',
+    securityQuestion: '', // ⭐ NEW
+    securityAnswer: '' // ⭐ NEW
   });
+  const [securityQuestions, setSecurityQuestions] = useState([]); // ⭐ NEW
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
 
-  const { username, email, password, confirmPassword, full_name, phone } = formData;
+  const { username, email, password, confirmPassword, full_name, phone, securityQuestion, securityAnswer } = formData;
+
+  // ⭐ NEW: Fetch security questions on mount
+  useEffect(() => {
+    fetchSecurityQuestions();
+  }, []);
 
   // ⭐ DEBUG: Log when component mounts
   useEffect(() => {
@@ -31,6 +39,16 @@ const Signup = ({ setIsAuthenticated, setUser }) => {
     console.log('🔍 Redirect param value:', searchParams.get('redirect'));
     console.log('🔍 All params:', Object.fromEntries(searchParams.entries()));
   }, [searchParams]);
+
+  // ⭐ NEW: Fetch security questions
+  const fetchSecurityQuestions = async () => {
+    try {
+      const response = await passwordResetAPI.getSecurityQuestions();
+      setSecurityQuestions(response.data.questions);
+    } catch (err) {
+      console.error('Failed to fetch security questions:', err);
+    }
+  };
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -79,6 +97,19 @@ const Signup = ({ setIsAuthenticated, setUser }) => {
         }
         break;
 
+      // ⭐ NEW: Validate security fields
+      case 'securityQuestion':
+        if (!value) {
+          error = 'Please select a security question';
+        }
+        break;
+
+      case 'securityAnswer':
+        if (!value.trim()) {
+          error = 'Please provide a security answer';
+        }
+        break;
+
       default:
         break;
     }
@@ -124,6 +155,15 @@ const Signup = ({ setIsAuthenticated, setUser }) => {
       errors.confirmPassword = 'Passwords do not match';
     }
 
+    // ⭐ NEW: Validate security question fields
+    if (!securityQuestion) {
+      errors.securityQuestion = 'Please select a security question';
+    }
+
+    if (!securityAnswer.trim()) {
+      errors.securityAnswer = 'Please provide a security answer';
+    }
+
     return errors;
   };
 
@@ -145,12 +185,15 @@ const Signup = ({ setIsAuthenticated, setUser }) => {
       console.log('📝 Attempting signup...');
       console.log('🔍 BEFORE SIGNUP - Redirect param:', searchParams.get('redirect'));
       
+      // ⭐ MODIFIED: Include security question in registration
       const response = await authAPI.register({ 
         username, 
         email, 
         password, 
         full_name, 
-        phone 
+        phone,
+        securityQuestion, // ⭐ NEW
+        securityAnswer // ⭐ NEW
       });
       
       console.log('✅ Signup response:', response.data);
@@ -302,6 +345,48 @@ const Signup = ({ setIsAuthenticated, setUser }) => {
               />
               {fieldErrors.confirmPassword && (
                 <span className="field-error">{fieldErrors.confirmPassword}</span>
+              )}
+            </div>
+          </div>
+
+          {/* ⭐ NEW: Security Question Fields */}
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="securityQuestion">Security Question *</label>
+              <select
+                id="securityQuestion"
+                name="securityQuestion"
+                value={securityQuestion}
+                onChange={onChange}
+                onBlur={handleBlur}
+                className={`form-input ${fieldErrors.securityQuestion ? 'error' : ''}`}
+              >
+                <option value="">Select a security question</option>
+                {securityQuestions.map((question, index) => (
+                  <option key={index} value={question}>
+                    {question}
+                  </option>
+                ))}
+              </select>
+              {fieldErrors.securityQuestion && (
+                <span className="field-error">{fieldErrors.securityQuestion}</span>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="securityAnswer">Security Answer *</label>
+              <input
+                type="text"
+                id="securityAnswer"
+                name="securityAnswer"
+                value={securityAnswer}
+                onChange={onChange}
+                onBlur={handleBlur}
+                placeholder="Your answer"
+                className={`form-input ${fieldErrors.securityAnswer ? 'error' : ''}`}
+              />
+              {fieldErrors.securityAnswer && (
+                <span className="field-error">{fieldErrors.securityAnswer}</span>
               )}
             </div>
           </div>

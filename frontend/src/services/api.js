@@ -58,7 +58,6 @@ export const artworkAPI = {
   createArtwork: (data) => api.post('/artworks', data),
   updateArtwork: (id, data) => api.patch(`/artworks/${id}`, data),
   deleteArtwork: (id) => api.delete(`/artworks/${id}`),
-  // ⭐ NEW: Upload image
   uploadImage: (formData) => {
     return api.post('/artworks/upload-image', formData, {
       headers: {
@@ -93,16 +92,21 @@ export const bookingAPI = {
   getBookingById: (id) => api.get(`/bookings/${id}`)
 };
 
+// ⭐ MODIFIED: Password Reset APIs (SIMPLIFIED - ONE STEP)
+export const passwordResetAPI = {
+  getSecurityQuestions: () => api.get('/password-reset/security-questions'),
+  resetPassword: (data) => api.post('/password-reset/reset-password', data),
+  updateSecurityQuestion: (data) => api.post('/password-reset/update-security-question', data)
+};
+
 // Helper function to get image URL
 export const getImageURL = (imageName) => {
   if (!imageName) return 'https://via.placeholder.com/400x500?text=No+Image';
   
-  // If already has /wall_arts/ prefix, return as is
   if (imageName.startsWith('/wall_arts/')) {
     return imageName;
   }
   
-  // Add /wall_arts/ prefix
   return `/wall_arts/${imageName}`;
 };
 

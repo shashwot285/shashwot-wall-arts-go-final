@@ -1,19 +1,29 @@
 // backend/controllers/authController.js
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const db = require('../config/database');
 
 // Register new user
 exports.register = async (req, res) => {
   try {
-    const { username, email, password, full_name, phone } = req.body;
+    const { username, email, password, full_name, phone, securityQuestion, securityAnswer } = req.body;
     
-    console.log('📝 Registration attempt:', { username, email, full_name, phone });
+    console.log('📝 Registration attempt:', { username, email, full_name, phone, securityQuestion });
     
     // Validate input
     if (!username || !email || !password) {
       return res.status(400).json({
         success: false,
         message: 'Please provide username, email, and password'
+      });
+    }
+
+    // ⭐ IMPORTANT: Validate security question fields
+    if (!securityQuestion || !securityAnswer) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please select a security question and provide an answer'
       });
     }
     
@@ -30,6 +40,14 @@ exports.register = async (req, res) => {
     // Create new user
     const newUser = await User.create({ username, email, password, full_name, phone });
     console.log('✅ User created:', newUser);
+
+    // ⭐ IMPORTANT: Add security question for ALL new users
+    const hashedAnswer = await bcrypt.hash(securityAnswer.toLowerCase().trim(), 10);
+    await db.query(
+      'UPDATE users SET security_question = $1, security_answer = $2 WHERE user_id = $3',
+      [securityQuestion, hashedAnswer, newUser.user_id]
+    );
+    console.log('✅ Security question added for:', email);
     
     // Generate JWT token
     const token = jwt.sign(
@@ -50,7 +68,7 @@ exports.register = async (req, res) => {
         username: newUser.username,
         email: newUser.email,
         full_name: newUser.full_name,
-        phone: newUser.phone, // ⭐ ADDED: Include phone in response
+        phone: newUser.phone,
         role: newUser.role || 'user',
         token: token
       }
@@ -65,7 +83,7 @@ exports.register = async (req, res) => {
   }
 };
 
-// Login user
+// Login user (NO CHANGES - kept exactly as is)
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -121,7 +139,7 @@ exports.login = async (req, res) => {
         username: user.username,
         email: user.email,
         full_name: user.full_name,
-        phone: user.phone, // ⭐ ADDED: Include phone in response
+        phone: user.phone,
         role: user.role || 'user',
         token: token
       }

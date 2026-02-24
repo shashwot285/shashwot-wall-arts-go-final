@@ -1,0 +1,15 @@
+﻿node_modules/
+frontend/node_modules/
+backend/node_modules/
+frontend/node_modules/.cache/
+backend/node_modules/.cache/
+.cache/
+*.cache
+.env
+backend/.env
+frontend/.env
+frontend/build/
+*.log
+.vscode/
+.DS_Store
+*.docx

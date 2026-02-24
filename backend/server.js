@@ -21,12 +21,14 @@ const artworkRoutes = require('./routes/artworkRoutes');
 const artistRoutes = require('./routes/artistRoutes');
 const authRoutes = require('./routes/authRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
+const passwordResetRoutes = require('./routes/passwordResetRoutes'); // ⭐ NEW: Password reset routes
 
 // Use routes
 app.use('/api/artworks', artworkRoutes);
 app.use('/api/artists', artistRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/bookings', bookingRoutes);
+app.use('/api/password-reset', passwordResetRoutes); // ⭐ NEW: Password reset endpoint
 
 // Health check route
 app.get('/api/health', (req, res) => {
@@ -50,7 +52,7 @@ app.use((err, req, res, next) => {
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📁 Images available at http://localhost:${PORT}/images/`);
-  console.log(`🗄️  PostgreSQL Database Connected`);
+  console.log(` Server running on http://localhost:${PORT}`);
+  console.log(` Images available at http://localhost:${PORT}/images/`);
+  console.log(`  PostgreSQL Database Connected`);
 });
