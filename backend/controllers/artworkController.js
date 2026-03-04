@@ -314,7 +314,7 @@ exports.uploadImage = async (req, res) => {
         message: 'Please upload an image file'
       });
     }
-    
+    //test
     // Return just the filename (not the full path)
     const imageUrl = req.file.filename;
     
