@@ -40,7 +40,7 @@ const authenticateToken = (req, res, next) => {
     };
     
     console.log('✅ User attached to request:', req.user);
-    
+    //test
     next();
   } catch (error) {
     console.error('❌ Token verification failed:', error.message);
