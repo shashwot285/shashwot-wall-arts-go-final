@@ -383,7 +383,7 @@ const Signup = ({ setIsAuthenticated, setUser }) => {
                 onChange={onChange}
                 onBlur={handleBlur}
                 placeholder="Your answer"
-                className={`form-input ${fieldErrors.securityAnswer ? 'error' : ''}`}
+                className={`form-input ${fieldErrors.securityAnswer ? 'error' : ''}`}//test
               />
               {fieldErrors.securityAnswer && (
                 <span className="field-error">{fieldErrors.securityAnswer}</span>
