@@ -195,7 +195,7 @@ class Artwork {
         console.log('⚠️ No artwork found to delete with ID:', id);
         return null;
       }
-      
+      //test
       console.log('✅ Artwork deleted:', id);
       return result.rows[0];
     } catch (error) {
