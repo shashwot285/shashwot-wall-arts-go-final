@@ -202,7 +202,7 @@ exports.deleteArtist = async (req, res) => {
         message: 'Cannot delete artist with existing artworks. Please delete artworks first.'
       });
     }
-    
+    //test
     res.status(500).json({
       success: false,
       message: 'Error deleting artist',
