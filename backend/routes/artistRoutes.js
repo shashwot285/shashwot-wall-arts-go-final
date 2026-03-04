@@ -12,4 +12,4 @@ router.post('/', authenticateToken, artistController.createArtist);
 router.patch('/:id', authenticateToken, artistController.updateArtist);
 router.delete('/:id', authenticateToken, artistController.deleteArtist);
 
-module.exports = router;
+module.exports = router;//test
