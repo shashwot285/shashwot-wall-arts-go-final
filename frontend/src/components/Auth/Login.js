@@ -196,7 +196,7 @@ const Login = ({ setIsAuthenticated, setUser }) => {
               onChange={onChange}
               onBlur={handleBlur}
               placeholder="Enter your password"
-              className={`form-input ${fieldErrors.password ? 'error' : ''}`}
+              className={`form-input ${fieldErrors.password ? 'error' : ''}`}//test
             />
             {fieldErrors.password && (
               <span className="field-error">{fieldErrors.password}</span>
