@@ -244,7 +244,7 @@ exports.cancelOwnBooking = async (req, res) => {
     }
     
     const updatedBooking = await Booking.updateStatus(bookingId, 'cancelled');
-    
+    //test
     console.log('✅ Booking cancelled successfully by user');
     
     res.status(200).json({
