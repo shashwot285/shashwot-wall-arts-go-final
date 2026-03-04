@@ -9,7 +9,7 @@ const uploadsDir = path.join(__dirname, '../../frontend/public/wall_arts');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
-
+//test
 // Configure storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
