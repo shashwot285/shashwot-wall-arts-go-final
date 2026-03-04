@@ -683,7 +683,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 480px) {//test
   .booking-summary h2 {
     font-size: 1.5rem;
   }

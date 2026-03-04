@@ -223,7 +223,7 @@ describe('Artwork Model', () => {
 
       expect(result).toEqual(mockArtworks);
     });
-
+//test
     it('should sort artworks by bestseller status', async () => {
       const mockArtworks = [
         { artwork_id: 1, is_bestseller: true },

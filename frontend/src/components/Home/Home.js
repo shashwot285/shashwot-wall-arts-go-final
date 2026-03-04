@@ -19,7 +19,7 @@ function Home() {
     try {
       setLoading(true);
       
-      const artistsResponse = await artistAPI.getAllArtists();
+      const artistsResponse = await artistAPI.getAllArtists();//test
       const artistsData = artistsResponse.data.data;
       setArtists(artistsData);
       

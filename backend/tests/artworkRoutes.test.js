@@ -305,7 +305,7 @@ describe('Artwork API Endpoints', () => {
 
       expect(response.body.success).toBe(true);
       expect(response.body.message).toBe('Artwork deleted successfully');
-    });
+    });//test
 
     it('should deny access without admin token', async () => {
       const response = await request(app)

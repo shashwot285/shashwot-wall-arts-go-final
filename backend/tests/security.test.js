@@ -311,7 +311,7 @@ describe('Security Tests', () => {
         expect(isHTML || isScript).toBe(true);
       });
     });
-  });
+  });//test
 
   describe('CORS and Security Headers', () => {
     it('should validate allowed origins for CORS', () => {

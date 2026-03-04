@@ -53,12 +53,12 @@
 .top-bar {
   max-width: 1300px;
   margin: 20px auto 40px auto;
-  background: #ffffff;
+  background: #f5f1ed;
   padding: 15px 30px;
   padding-left: 50px;
   padding-right: 100px;
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); /* Soft, elegant shadow */
+  box-shadow: none; /* Removed shadow to blend with background */
   border: none;
   position: sticky;
   top: 70px;
