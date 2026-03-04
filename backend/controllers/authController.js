@@ -128,7 +128,7 @@ exports.login = async (req, res) => {
       process.env.JWT_SECRET || 'your-secret-key-here', 
       { expiresIn: '7d' }
     );
-    
+    //test
     console.log('✅ Login successful:', email);
     
     res.status(200).json({
