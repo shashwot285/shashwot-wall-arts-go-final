@@ -11,4 +11,4 @@ router.post('/reset-password', passwordResetController.resetPassword);
 // Update security question (for existing users)
 router.post('/update-security-question', passwordResetController.updateSecurityQuestion);
 
-module.exports = router;
+module.exports = router;//test
