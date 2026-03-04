@@ -667,7 +667,7 @@ function ManageContent() {
                     className="artwork-thumbnail"
                     onError={(e) => {
                       e.target.src = 'https://via.placeholder.com/100x120?text=No+Image';
-                    }}
+                    }}//test
                   />
                   <div className="item-info">
                     <h3>{artwork.title}</h3>
