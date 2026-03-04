@@ -136,7 +136,7 @@ function MyBookings() {
       cancelled: '#ef4444'
     };
     return colors[status?.toLowerCase()] || colors.pending;
-  };
+  };//test
 
   const handleBookingClick = (booking) => {
     console.log('🔘 Booking clicked:', booking.booking_id);
