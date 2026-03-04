@@ -200,7 +200,7 @@ function BookingModal({ artwork, onClose }) {
         </div>
       </div>
     );
-  }
+  }//test
 
   // ⭐ UNCHANGED: Original modal for authenticated users
   return (
