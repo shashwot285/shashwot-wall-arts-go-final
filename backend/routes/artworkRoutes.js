@@ -18,4 +18,4 @@ router.post('/', authenticateToken, artworkController.createArtwork);
 router.patch('/:id', authenticateToken, artworkController.updateArtwork);
 router.delete('/:id', authenticateToken, artworkController.deleteArtwork);
 
-module.exports = router;
+module.exports = router;//test
