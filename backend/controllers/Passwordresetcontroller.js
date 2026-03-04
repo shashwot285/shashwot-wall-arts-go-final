@@ -94,7 +94,7 @@ exports.resetPassword = async (req, res) => {
     );
 
     console.log('✅ Password reset successful for:', user.email);
-
+//test
     res.json({
       success: true,
       message: 'Password reset successfully'
