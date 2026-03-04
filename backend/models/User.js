@@ -39,7 +39,7 @@ class User {
       console.error('Error in User.findByEmail:', error);
       throw error;
     }
-  }
+  }//test
 
   static async findById(id) {
     try {
