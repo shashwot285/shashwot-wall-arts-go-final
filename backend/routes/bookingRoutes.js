@@ -14,4 +14,4 @@ router.patch('/:id/status', bookingController.updateBookingStatus); // Admin onl
 router.patch('/:id/cancel', bookingController.cancelOwnBooking); // ⭐ NEW: User cancel
 router.get('/:id', bookingController.getBookingById);
 
-module.exports = router;
+module.exports = router;//test
