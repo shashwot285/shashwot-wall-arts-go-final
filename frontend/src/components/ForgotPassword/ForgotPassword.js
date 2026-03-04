@@ -149,7 +149,7 @@ const ForgotPassword = () => {
             <label>Security Question</label>
             <select
               name="securityQuestion"
-              value={formData.securityQuestion}
+              value={formData.securityQuestion}//test
               onChange={handleChange}
               required
             >
