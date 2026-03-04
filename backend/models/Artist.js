@@ -85,7 +85,7 @@ class Artist {
       if (parseInt(artworksCheck.rows[0].count) > 0) {
         throw new Error('Cannot delete artist with existing artworks');
       }
-      
+      //test
       const result = await db.query(
         'DELETE FROM artists WHERE artist_id = $1 RETURNING artist_id',
         [id]
