@@ -340,4 +340,4 @@ describe('Artwork Controller', () => {
       expect(res.status).toHaveBeenCalledWith(403);
     });
   });
-});
+});//test
