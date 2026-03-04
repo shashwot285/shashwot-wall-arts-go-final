@@ -138,7 +138,7 @@ class Booking {
       
       if (result.rows.length === 0) {
         throw new Error('Booking not found');
-      }
+      }//test
       
       console.log('✅ Status updated successfully');
       
