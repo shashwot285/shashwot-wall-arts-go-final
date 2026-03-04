@@ -67,7 +67,7 @@ const Navbar = ({ isAuthenticated, user, onLogout }) => {
                     <Link
                       to="/admin/manage-content"
                       className="dropdown-item"
-                      onClick={() => setShowUserMenu(false)}
+                      onClick={() => setShowUserMenu(false)}//test
                     >
                       🎨 Manage Content
                     </Link>
